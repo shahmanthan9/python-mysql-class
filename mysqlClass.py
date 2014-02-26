@@ -6,12 +6,14 @@ import pymysql.cursors
 class MySQL:
     def __init__(self, DBHOST, DBPORT, DBUSER, DBPASSWD, DBNAME):
         try:
-            self.conn = pymysql.connect(host=DBHOST, port=DBPORT, user=DBUSER, passwd=DBPASSWD, db=DBNAME,cursorclass=pymysql.cursors.DictCursor)
-        except ConnectionError as exc:
+            self.conn = pymysql.connect(host=DBHOST, port=DBPORT, user=DBUSER, passwd=DBPASSWD, db=DBNAME,
+                                        cursorclass=pymysql.cursors.DictCursor)
+            self.conn.autocommit(1)
+        except Exception as exc:
             print("DB Connection Failed. Exception that occured: ", exc);
             exit
 
-    def executeSQL(self,sql):
+    def executeSQL(self, sql):
         try:
             cur = self.conn.cursor()
             cur.execute(sql)
@@ -31,7 +33,7 @@ class MySQL:
         cur.close()
         return result
 
-    def escapeString(self,arg):
+    def escapeString(self, arg):
         return self.conn.escape_string(arg)
 
     def lastInsertId(self):
