@@ -9,17 +9,17 @@ class MySQL:
             self.conn = pymysql.connect(host=DBHOST, port=DBPORT, user=DBUSER, passwd=DBPASSWD, db=DBNAME,
                                         cursorclass=pymysql.cursors.DictCursor)
             self.conn.autocommit(1)
-        except Exception as exc:
-            print("DB Connection Failed. Exception that occured: ", exc);
+        except self.conn.DatabaseError as exc:
+            print(exc)
             exit
 
     def executeSQL(self, sql):
         try:
             cur = self.conn.cursor()
             cur.execute(sql)
-        except Exception as sql_exception:
-            print("Sql Failed:" + sql + " Reason: " + sql_exception)
-            exit
+        except cur.DatabaseError as sql_exception:
+            print(sql_exception)
+            exit()
 
         temp = []
         result = {}
